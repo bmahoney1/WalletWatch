@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { fetchMonthlyExpenses, fetchSalary } from '../../lib/appwrite';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import { fetchTotalExpenses, fetchSalary, fetchTotalWeeklySubmitted } from '../../lib/appwrite';
+import { router } from "expo-router";
 
 const HomePage = () => {
-  const [monthlyExpenses, setMonthlyExpenses] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
   const [yearlySalary, setYearlySalary] = useState(0);
   const [netAmountNextYear, setNetAmountNextYear] = useState(0);
+  const [avgMonthlyExpenses, setAvgMonthlyExpenses] = useState(0);
 
   useEffect(() => {
     const calculateReports = async () => {
-      const expenses = await fetchMonthlyExpenses();
+      const expenses = await fetchTotalExpenses();
       const salary = await fetchSalary();
+      const weeklyDocs = await fetchTotalWeeklySubmitted();
 
       const totalExpenses = expenses
-      const yearlyExpenses = totalExpenses * 12;
-      const netAmount = (salary*1000) - yearlyExpenses;
-
-      setMonthlyExpenses(totalExpenses);
-      setYearlySalary(salary*1000);
+      const yearlyExpenses = totalExpenses;
+      const netAmount = ((salary*.7)/52)*weeklyDocs - yearlyExpenses;
+      
+      setAvgMonthlyExpenses((totalExpenses/weeklyDocs)*4)
+      setTotalExpenses(totalExpenses);
+      setYearlySalary(salary*.7);
       setNetAmountNextYear(netAmount);
     };
 
@@ -29,20 +33,26 @@ const HomePage = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.mainTitle}>Here is your <Text style = {styles.wallet}>WalletWatch</Text></Text>
         
-        <View style={styles.reportBox}>
-          <Text style={styles.reportTitle}>Monthly Expenses</Text>
-          <Text style={styles.reportValue}>${monthlyExpenses}</Text>
-        </View>
+        <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/TotalExpenses")}>
+          <Text style={styles.reportTitle}>Total Expenses</Text>
+          <Text style={styles.reportValue}>${totalExpenses.toFixed(2)}</Text>
+        </TouchableOpacity>
 
-        <View style={styles.reportBox}>
+        <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/AvgMonthlyExpenses")}>
+          <Text style={styles.reportTitle}>Average Monthly Expenses</Text>
+          <Text style={styles.reportValue}>${avgMonthlyExpenses.toFixed(2)}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/Income")}>
           <Text style={styles.reportTitle}>Yearly Salary</Text>
-          <Text style={styles.reportValue}>${yearlySalary}</Text>
-        </View>
+          <Text style={styles.reportValue}>${yearlySalary.toFixed(2)}</Text>
+        </TouchableOpacity>
 
-        <View style={styles.reportBox}>
-          <Text style={styles.reportTitle}>Net Amount Next Year</Text>
-          <Text style={styles.reportValue}>${netAmountNextYear}</Text>
-        </View>
+        <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/NetMoney")}>
+          <Text style={styles.reportTitle}>Net Amount</Text>
+          <Text style={styles.reportValue}>${netAmountNextYear.toFixed(2)}</Text>
+        </TouchableOpacity>
+
       </ScrollView>
     </SafeAreaView>
   );

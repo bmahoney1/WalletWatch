@@ -1,8 +1,7 @@
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Image, TouchableOpacity, StyleSheet, TextInput, Button, Text} from "react-native";
-import { useState , useEffect} from "react";
-
+import { View, Image, TouchableOpacity, StyleSheet, TextInput, Button, Text } from "react-native";
+import { useState, useEffect } from "react";
 import { icons } from "../../constants";
 import { collectFinances, signOut, fetchSalary, fetchRent, fetchDebt } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
@@ -21,7 +20,7 @@ const Profile = () => {
       const fetchedSalary = await fetchSalary();
       if (fetchedSalary !== null) {
         setPlaceholder1(fetchedSalary);
-        setSalary(fetchedSalary)
+        setSalary(fetchedSalary);
       }
     };
 
@@ -33,7 +32,7 @@ const Profile = () => {
       const fetchedRent = await fetchRent();
       if (fetchedRent !== null) {
         setPlaceholder3(fetchedRent);
-        setRent(fetchedRent)
+        setRent(fetchedRent);
       }
     };
 
@@ -45,7 +44,7 @@ const Profile = () => {
       const fetchedDebt = await fetchDebt();
       if (fetchedDebt !== null) {
         setPlaceholder2(fetchedDebt);
-        setDebt(fetchedDebt)
+        setDebt(fetchedDebt);
       }
     };
 
@@ -62,98 +61,68 @@ const Profile = () => {
     router.replace("/sign-in");
   };
 
-  //const [salary, setSalary] = useState(placeholder1);
-  // const [rent, setRent] = useState('');
-  // const [debt, setDebt] = useState('');
-
-  const handleSalaryChange = (value_salary) => {
-    //const newSalary = [...salary]; // This will copy the first dimension of the array
-    newSalary= value_salary; // This puts the value in the exact cell
-    setSalary(newSalary);
-  };
-  const handleRentChange = (value_rent) => {
-    //const newSalary = [...salary]; // This will copy the first dimension of the array
-    newRent= value_rent; // This puts the value in the exact cell
-    setRent(newRent);
-  };
-  const handleDebtChange = (value_debt) => {
-    //const newDebt = [...debt]; // This will copy the first dimension of the array
-    newDebt= value_debt; // This puts the value in the exact cell
-    setDebt(newDebt);
+  const handleSalaryChange = (value) => {
+    setSalary(value);
   };
 
-  const handleSubmit = async () => {   
-    await collectFinances(salary, rent, debt)
+  const handleRentChange = (value) => {
+    setRent(value);
+  };
+
+  const handleDebtChange = (value) => {
+    setDebt(value);
+  };
+
+  const handleSubmit = async () => {
+    await collectFinances(salary, rent, debt);
   };
 
   return (
-    <SafeAreaView style = {{backgroundColor:"white", height:'100%'}}>
-      <View className="w-full flex justify-center items-center mt-6 mb-12 px-4">
-        <TouchableOpacity
-          onPress={logout}
-          className="flex w-full items-end mb-10"
-        >
-          <Image
-            source={icons.logout}
-            resizeMode="contain"
-            className="w-6 h-6"
-          />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+          <Image source={icons.logout} resizeMode="contain" style={styles.logoutIcon} />
         </TouchableOpacity>
-
-        <View className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center">
-          <Image
-            source={{ uri: user?.avatar }}
-            resizeMode="cover"
-            style = {{width:125, height:125, borderRadius:10, marginBottom:10}}
-          />
-        </View>
-
+        <Image source={{ uri: user?.avatar }} style={styles.avatar} />
         <InfoBox
           title={user?.username}
-          containerStyles="mt-5"
-          titleStyles={{color:"black", fontSize:40, fontWeight: '700', paddingTop:20}}
+          containerStyles={styles.infoBox}
+          titleStyles={styles.infoBoxTitle}
         />
-
-        <View >
-          <View  style = {styles.sub}>
-            <Text style = {styles.subtitle1} >
-              Salary:
-            </Text>
-            <TextInput
-              style={styles.cell}
-              value={salary}
-              onChangeText={(text) => handleSalaryChange(text)}
-              eyboardType="numeric"
-              placeholder= {placeholder1+'k'}
-            />
-          </View>
-          <View  style = {styles.sub}>
-            <Text style = {styles.subtitle2} >
-              Rent:
-            </Text>
-            <TextInput
-              style={styles.cell}
-              value={rent}
-              onChangeText={(text) => handleRentChange(text)}
-              eyboardType="numeric"
-              placeholder= {placeholder3+'k'}
-            />
-          </View>
-          <View style = {styles.sub}>
-            <Text style = {styles.subtitle2}>
-              Debt:
-            </Text>
-            <TextInput
-              style={styles.cell}
-              value={debt}
-              onChangeText={(text) => handleDebtChange(text)}
-              keyboardType="numeric"
-              placeholder={placeholder2 +'k'}
-            />
-          </View>
-        </View>
       </View>
-      <Button title="Update" onPress={handleSubmit} />
+      <View style={styles.form}>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Salary:</Text>
+          <TextInput
+            style={styles.input}
+            value={salary}
+            onChangeText={handleSalaryChange}
+            keyboardType="numeric"
+            placeholder={`${placeholder1}`}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Rent:</Text>
+          <TextInput
+            style={styles.input}
+            value={rent}
+            onChangeText={handleRentChange}
+            keyboardType="numeric"
+            placeholder={`${placeholder3}`}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Debt:</Text>
+          <TextInput
+            style={styles.input}
+            value={debt}
+            onChangeText={handleDebtChange}
+            keyboardType="numeric"
+            placeholder={`${placeholder2}`}
+          />
+        </View>
+        <Button title="Update" onPress={handleSubmit} color="#4CAF50" />
+      </View>
     </SafeAreaView>
   );
 };
@@ -163,53 +132,54 @@ export default Profile;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: '#fff',
   },
-  title: {
+  header: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  logoutButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  logoutIcon: {
+    width: 24,
+    height: 24,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  infoBox: {
+    marginTop: 10,
+  },
+  infoBoxTitle: {
+    color: '#000',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: '700',
+  },
+  form: {
+    padding: 20,
+  },
+  inputGroup: {
     marginBottom: 20,
   },
-  subtitle1:{
-    color: 'green',
-    fontSize:30,
-    textAlign:'center',
-    paddingTop:10,
-    paddingBottom:2,
+  label: {
+    fontSize: 18,
+    color: '#333',
+    marginBottom: 5,
   },
-  subtitle2:{
-    color: 'red',
-    fontSize:30,
-    textAlign:'center',
-    paddingTop:10,
-    paddingBottom:2,
-  },
-  container: {
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
     padding: 10,
-    flexDirection: 'column',
-    alignSelf: 'center',
-  },
-  cell: {
-    borderWidth: 1,
-    borderColor: '#000',
-    width: 200,
-    height: 50,
-    textAlign: 'center',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    fontSize:25
-  },
-  headerCell: {
-    borderWidth: 1,
-    borderColor: '#000',
-    width: 150,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#d0d0d0',
-  },
-  headerText: {
-    fontWeight: 'bold',
+    fontSize: 18,
+    backgroundColor: '#f9f9f9',
   },
 });
-
-
