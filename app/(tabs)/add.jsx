@@ -16,8 +16,11 @@ const ExcelSheet = () => {
 
   const handleSubmit = async () => {
     const firstColumnValues = data.map(row => row[0]);
-    const secondColumnValues = data.map(row => row[1]);    
+    const secondColumnValues = data.map(row => row[1]);
     await collectData(firstColumnValues, secondColumnValues);
+    // Reset visible rows and clear data
+    setVisibleRows(5);
+    setData(Array(20).fill(['', '']));
   };
 
   const addMoreRows = () => {
@@ -114,4 +117,3 @@ const styles = StyleSheet.create({
 });
 
 export default ExcelSheet;
- 
