@@ -33,7 +33,7 @@ const Welcome = () => {
           </Text>
 
           <Text style = {styles.subtitle}>
-            It is time you become finiancially free using WalletWatch!
+            It is time you become financially free using WalletWatch!
           </Text>
 
           <CustomButton

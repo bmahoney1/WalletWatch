@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Image, TouchableOpacity, StyleSheet, TextInput, Button, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useState, useEffect } from "react";
 import { icons } from "../../constants";
-import { collectFinances, signOut, fetchSalary, fetchRent, fetchDebt } from "../../lib/appwrite";
+import { collectFinances, signOut, fetchSalary, fetchRent, fetchDebt, fetchSavings } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { InfoBox } from "../../components";
 
@@ -11,9 +11,11 @@ const Profile = () => {
   const [placeholder1, setPlaceholder1] = useState('Enter salary');
   const [placeholder2, setPlaceholder2] = useState('Enter debt');
   const [placeholder3, setPlaceholder3] = useState('Enter rent');
+  const [placeholder4, setPlaceholder4] = useState('Enter savings');
   const [salary, setSalary] = useState('');
   const [rent, setRent] = useState('');
   const [debt, setDebt] = useState('');
+  const [savings, setSavings] = useState('');
 
   useEffect(() => {
     const getSalary = async () => {
@@ -25,6 +27,18 @@ const Profile = () => {
     };
 
     getSalary();
+  }, []);
+
+  useEffect(() => {
+    const getSavings = async () => {
+      const fetchedSavings = await fetchSavings();
+      if (fetchedSavings !== null) {
+        setPlaceholder4(fetchedSavings);
+        setSavings(fetchedSavings);
+      }
+    };
+
+    getSavings();
   }, []);
 
   useEffect(() => {
@@ -65,6 +79,10 @@ const Profile = () => {
     setSalary(value);
   };
 
+  const handleSavingsChange = (value) => {
+    setSavings(value);
+  };
+
   const handleRentChange = (value) => {
     setRent(value);
   };
@@ -74,7 +92,7 @@ const Profile = () => {
   };
 
   const handleSubmit = async () => {
-    await collectFinances(salary, rent, debt);
+    await collectFinances(salary, savings, rent, debt);
   };
 
   return (
@@ -100,6 +118,16 @@ const Profile = () => {
               onChangeText={handleSalaryChange}
               keyboardType="numeric"
               placeholder={`${placeholder1}`}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Savings:</Text>
+            <TextInput
+              style={styles.input}
+              value={savings}
+              onChangeText={handleSavingsChange}
+              keyboardType="numeric"
+              placeholder={`${placeholder4}`}
             />
           </View>
           <View style={styles.inputGroup}>
