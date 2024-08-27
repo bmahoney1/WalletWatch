@@ -37,7 +37,7 @@ const NetMoney = () => {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Average Monthly Expenses</Text>
+        <Text style={styles.title}>Net Amount of Money</Text>
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Number of Weeks of Income:</Text>
           <Text style={styles.infoValue}>{numDocuments}</Text>

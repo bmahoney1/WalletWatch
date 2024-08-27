@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Image, TouchableOpacity, StyleSheet, TextInput, Button, Text } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, TextInput, Button, Text, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useState, useEffect } from "react";
 import { icons } from "../../constants";
 import { collectFinances, signOut, fetchSalary, fetchRent, fetchDebt } from "../../lib/appwrite";
@@ -78,52 +78,54 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-          <Image source={icons.logout} resizeMode="contain" style={styles.logoutIcon} />
-        </TouchableOpacity>
-        <Image source={{ uri: user?.avatar }} style={styles.avatar} />
-        <InfoBox
-          title={user?.username}
-          containerStyles={styles.infoBox}
-          titleStyles={styles.infoBoxTitle}
-        />
-      </View>
-      <View style={styles.form}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Salary:</Text>
-          <TextInput
-            style={styles.input}
-            value={salary}
-            onChangeText={handleSalaryChange}
-            keyboardType="numeric"
-            placeholder={`${placeholder1}`}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+            <Image source={icons.logout} resizeMode="contain" style={styles.logoutIcon} />
+          </TouchableOpacity>
+          <Image source={{ uri: user?.avatar }} style={styles.avatar} />
+          <InfoBox
+            title={user?.username}
+            containerStyles={styles.infoBox}
+            titleStyles={styles.infoBoxTitle}
           />
         </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Rent:</Text>
-          <TextInput
-            style={styles.input}
-            value={rent}
-            onChangeText={handleRentChange}
-            keyboardType="numeric"
-            placeholder={`${placeholder3}`}
-          />
+        <View style={styles.form}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Salary:</Text>
+            <TextInput
+              style={styles.input}
+              value={salary}
+              onChangeText={handleSalaryChange}
+              keyboardType="numeric"
+              placeholder={`${placeholder1}`}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Rent:</Text>
+            <TextInput
+              style={styles.input}
+              value={rent}
+              onChangeText={handleRentChange}
+              keyboardType="numeric"
+              placeholder={`${placeholder3}`}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Debt:</Text>
+            <TextInput
+              style={styles.input}
+              value={debt}
+              onChangeText={handleDebtChange}
+              keyboardType="numeric"
+              placeholder={`${placeholder2}`}
+            />
+          </View>
+          <Button title="Update" onPress={handleSubmit} color="#4CAF50" />
         </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Debt:</Text>
-          <TextInput
-            style={styles.input}
-            value={debt}
-            onChangeText={handleDebtChange}
-            keyboardType="numeric"
-            placeholder={`${placeholder2}`}
-          />
-        </View>
-        <Button title="Update" onPress={handleSubmit} color="#4CAF50" />
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

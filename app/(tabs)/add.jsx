@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, ScrollView, Text, Button, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, ScrollView, Text, Button, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { collectData } from "../../lib/appwrite";
 
-
 const ExcelSheet = () => {
-  const [data, setData] = useState(Array(20).fill(['', '']));
+  const [data, setData] = useState(Array(20).fill(['', ''])); // Initialize with 20 rows
+  const [visibleRows, setVisibleRows] = useState(5); // Start with 5 visible rows
 
   const handleInputChange = (value, rowIndex, colIndex) => {
     const newData = [...data]; // This will copy the first dimension of the array
@@ -15,45 +15,54 @@ const ExcelSheet = () => {
   };
 
   const handleSubmit = async () => {
-    firstColumnValues = data.map(row => row[0])
-    secondColumnValues = data.map(row => row[1])    
-    await collectData(firstColumnValues,secondColumnValues)
+    const firstColumnValues = data.map(row => row[0]);
+    const secondColumnValues = data.map(row => row[1]);    
+    await collectData(firstColumnValues, secondColumnValues);
+  };
+
+  const addMoreRows = () => {
+    setVisibleRows(prevVisibleRows => Math.min(prevVisibleRows + 5, data.length));
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.centerContainer}>
-        <Text style={styles.title}>Weekly Expenses</Text>
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <View style={styles.headerCell}>
-              <Text style={styles.headerText}>Expense</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.centerContainer}>
+          <Text style={styles.title}>Weekly Expenses</Text>
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <View style={styles.headerCell}>
+                <Text style={styles.headerText}>Expense</Text>
+              </View>
+              <View style={styles.headerCell}>
+                <Text style={styles.headerText}>Amount</Text>
+              </View>
             </View>
-            <View style={styles.headerCell}>
-              <Text style={styles.headerText}>Amount</Text>
-            </View>
+            {data.slice(0, visibleRows).map((row, rowIndex) => (
+              <View key={rowIndex} style={styles.row}>
+                <TextInput
+                  style={styles.cell}
+                  value={row[0]}
+                  onChangeText={(text) => handleInputChange(text, rowIndex, 0)}
+                  placeholder="Enter expense"
+                />
+                <TextInput
+                  style={styles.cell}
+                  value={row[1]}
+                  onChangeText={(text) => handleInputChange(text, rowIndex, 1)}
+                  keyboardType="numeric"
+                  placeholder="Enter amount"
+                />
+              </View>
+            ))}
           </View>
-          {data.map((row, rowIndex) => (
-            <View key={rowIndex} style={styles.row}>
-              <TextInput
-                style={styles.cell}
-                value={row[0]}
-                onChangeText={(text) => handleInputChange(text, rowIndex, 0)}
-                placeholder="Enter expense"
-              />
-              <TextInput
-                style={styles.cell}
-                value={row[1]}
-                onChangeText={(text) => handleInputChange(text, rowIndex, 1)}
-                keyboardType="numeric"
-                placeholder="Enter amount"
-              />
-            </View>
-          ))}
-        </View>
-        <Button title="Submit" onPress={handleSubmit} />
-      </ScrollView>
-    </SafeAreaView>
+          {visibleRows < data.length && (
+            <Button title="More" onPress={addMoreRows} />
+          )}
+          <Button title="Submit" onPress={handleSubmit} />
+        </ScrollView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -105,3 +114,4 @@ const styles = StyleSheet.create({
 });
 
 export default ExcelSheet;
+ 
