@@ -48,6 +48,7 @@ const RootLayout = () => {
         <Stack.Screen name="TotalExpenses" options={{ headerShown: false }} />
         <Stack.Screen name="NetMoney" options={{ headerShown: false }} />
         <Stack.Screen name="AvgMonthlyExpenses" options={{ headerShown: false }} />
+        <Stack.Screen name="MaximizeMoney" options={{ headerShown: false }} />
       </Stack>
     </GlobalProvider>
   );
