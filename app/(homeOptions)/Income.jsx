@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { fetchSalary } from '../lib/appwrite'; // Adjust the import based on your project structure
+import { fetchSalary } from '../../lib/appwrite'; // Adjust the import based on your project structure
 import { router } from 'expo-router'; // Adjust the import based on your project structure
 
 const Income = () => {

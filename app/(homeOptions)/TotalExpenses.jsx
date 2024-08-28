@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { fetchIndivExpenses } from '../lib/appwrite'; // Adjust the import based on your project structure
+import { fetchIndivExpenses } from '../../lib/appwrite'; // Adjust the import based on your project structure
 import { router } from "expo-router";
 
 

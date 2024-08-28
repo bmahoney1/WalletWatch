@@ -39,22 +39,22 @@ const HomePage = () => {
         
         <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/TotalExpenses")}>
           <Text style={styles.reportTitle}>Total Expenses</Text>
-          <Text style={styles.reportValue}>${totalExpenses.toFixed(2)}</Text>
+          <Text style={styles.reportValue2}>${totalExpenses.toFixed(2)}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/AvgMonthlyExpenses")}>
           <Text style={styles.reportTitle}>Average Monthly Expenses</Text>
-          <Text style={styles.reportValue}>${avgMonthlyExpenses.toFixed(2)}</Text>
+          <Text style={styles.reportValue2}>${avgMonthlyExpenses.toFixed(2)}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/Income")}>
-          <Text style={styles.reportTitle}>Yearly Salary</Text>
-          <Text style={styles.reportValue}>${yearlySalary.toFixed(2)}</Text>
+          <Text style={styles.reportTitle}>Yearly Salary (After taxes)</Text>
+          <Text style={styles.reportValue1}>${yearlySalary.toFixed(2)}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.reportBox} onPress={() => router.push("/NetMoney")}>
           <Text style={styles.reportTitle}>Net Amount of Money</Text>
-          <Text style={styles.reportValue}>${netAmountNextYear.toFixed(2)}</Text>
+          <Text style={netAmountNextYear >= 0 ? styles.reportValue1 : styles.reportValue2}>${netAmountNextYear.toFixed(2)}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.reportBox2} onPress={() => router.push("/MaximizeMoney")}>
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   reportBox2: {
-    backgroundColor: '#686868',
+    // backgroundColor: '#686868',
+    backgroundColor: '#4CAF50',
     padding: 20,
     marginVertical: 10,
     borderRadius: 10,
@@ -110,10 +111,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  reportValue: {
+  reportValue1: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#4CAF50',
+  },
+  reportValue2: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#cc0000',
   },
   wallet: {
     fontSize: 50,
